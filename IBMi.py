@@ -1,5 +1,6 @@
 import ftplib
 import utils as utils
+import codecs
 
 class IBMi():
 
@@ -21,6 +22,7 @@ class IBMi():
     def connect(self, host, timeout=10000):
         if not self.ftp_client:
             self.ftp_client = ftplib.FTP()
+            self.ftp_client.encoding = 'utf-8'
         try:
             self.ftp_client.connect(host, timeout=timeout)
         except Exception as e:
@@ -142,7 +144,7 @@ class IBMi():
             utils.mkdir_ine("./{}/{}/{}".format(self.out_path, library, file))
             mbr_list.append({'name': file, 'members': [self.read_line_mbr(line) for line in mbr]})
         return mbr_list
-
+ 
     def retrieve_member(self, library, file, member):
         resp = []
         if member:
@@ -194,12 +196,19 @@ class IBMi():
             return resp
         except ftplib.all_errors as e:
             self.raise_exception(e=e)
-
+    
+    def replace_non_utf8(self, data):
+        try:
+            result = data.encode('utf-8', errors='ignore').decode('utf-8')
+            return result
+        except:
+            return data
+    
     def write_file(self, data, file_path, ext="txt"):
         if ext == "json":
-            with open("{}/{}.json".format(self.out_path, file_path), 'w+') as f: f.write(utils.get_pretty_json(data))
+            with open("{}/{}.json".format(self.out_path, file_path), 'w+', encoding = 'utf-8') as f: f.write(utils.get_pretty_json(self.replace_non_utf8(data)))
         else:
-            with open("{}/{}.{}".format(self.out_path, file_path, ext), 'w+') as f: f.write(str(data))
+            with open("{}/{}.{}".format(self.out_path, file_path, ext), 'w+', encoding = 'utf-8') as f: f.write(self.replace_non_utf8(data))
 
     def raise_exception(self, msg="Unexpected exception", e=None):
         if e:

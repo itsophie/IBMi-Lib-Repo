@@ -19,8 +19,8 @@ This was made to make taking notes on learning the IBMi easier and to prototype 
 
 
 ## Usage
-* Generate library repo for existing configuration with credentials prompt```python IBMi-lib-repo.py -e barrett-test```
-* Generate library repo for existing configuration with credentials passed```python IBMi-lib-repo.py -e barrett-test --creds MYUSER MYPASSWORD```
+* Generate library repo for existing configuration with credentials prompt```python IBMi-lib-repo.py -e barrett-test-config```
+* Generate library repo for existing configuration with credentials passed```python IBMi-lib-repo.py -e barrett-test-config --creds MYUSER MYPASSWORD```
 * Setup new configuration and generate library repo ```python IBMi-lib-repo.py -n```
 * Show help info ```python IBMi-lib-repo.py -h```
 
